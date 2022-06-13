@@ -71,19 +71,19 @@ public class DeathSphere {
                     if (percentDistancePlayerIsToEdgeOfSphere >= 1) {
                         playerIsOutsideSphere = true;
                         // WHY U NO WORK????
-                        if(player.level.dimension() == Level.OVERWORLD){
-                            ServerPlayer subServerPlayer = (ServerPlayer) player;
-                            sphereRespawnPosition = subServerPlayer.getLevel().getSharedSpawnPos();
-                        }
-//                        List<BlockPos> respawnPosList = new ArrayList<>();
-//                        for(Player subPlayer : playersInDimension) {
-//                            ServerPlayer subServerPlayer = (ServerPlayer) subPlayer;
-//                            respawnPosList.add(subServerPlayer.getRespawnPosition());
+//                        if(player.level.dimension() == Level.OVERWORLD){
+//                            ServerPlayer subServerPlayer = (ServerPlayer) player;
+//                            sphereRespawnPosition = subServerPlayer.getLevel().getSharedSpawnPos();
 //                        }
-//                        System.out.println(respawnPosList);
-//                        Random rand = new Random();
-//                        sphereRespawnPosition = respawnPosList.get(rand.nextInt(respawnPosList.size()));
-//                        serverlevel.setDefaultSpawnPos(sphereRespawnPosition, 0);
+                        List<BlockPos> respawnPosList = new ArrayList<>();
+                        for(Player subPlayer : playersInDimension) {
+                            ServerPlayer subServerPlayer = (ServerPlayer) subPlayer;
+                            respawnPosList.add(subServerPlayer.getRespawnPosition());
+                        }
+                        System.out.println(respawnPosList);
+                        Random rand = new Random();
+                        sphereRespawnPosition = respawnPosList.get(rand.nextInt(respawnPosList.size()));
+                        serverlevel.setDefaultSpawnPos(sphereRespawnPosition, 0);
                         break;
                     } else {
                         maxPercentDistanceToEdgeOfSphereForAlPlayers =
@@ -113,7 +113,8 @@ public class DeathSphere {
     public static void OnPlayerDeathSetSpawn(LivingDeathEvent event) {
         if(event.getEntityLiving() instanceof Player player && DeathSphere.active) {
             ServerPlayer serverPlayer = (ServerPlayer) player;
-            serverPlayer.setRespawnPosition(Level.OVERWORLD, sphereRespawnPosition, 0, false, false);
+            System.out.println("Setting player spawn to " + sphereRespawnPosition);
+            serverPlayer.setRespawnPosition(Level.OVERWORLD, sphereRespawnPosition, 0, true, false);
             for(ServerPlayer otherServerPlayer : SERVER.getPlayerList().getPlayers()) {
                 otherServerPlayer.kill();
             }

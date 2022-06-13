@@ -23,7 +23,7 @@ public class ScreenEvents {
     }
 
     @SubscribeEvent
-    public static void ImmediateRespawn(ScreenOpenEvent event) {
+    public static void getDeathScreen(ScreenOpenEvent event) {
         Screen screen = event.getScreen();
         if (screen instanceof DeathScreen deathScreen) {
             playerDeathScreen = deathScreen;
@@ -31,9 +31,9 @@ public class ScreenEvents {
     }
 
     @SubscribeEvent
-    public static void handleDelayTicker(TickEvent.ClientTickEvent event) {
+    public static void respawnAfterShortDelay(TickEvent.ClientTickEvent event) {
         if (deathSphereActive && event.phase == TickEvent.Phase.END){
-            if (respawnDelayTicker != 40 && ScreenEvents.playerDeathScreen != null){
+            if (respawnDelayTicker != 30 && ScreenEvents.playerDeathScreen != null){
                 respawnDelayTicker++;
 //                System.out.println("Incrementing delay ticker");
             } else if (ScreenEvents.playerDeathScreen != null) {

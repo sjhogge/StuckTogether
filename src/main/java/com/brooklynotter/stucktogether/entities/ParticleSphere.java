@@ -8,6 +8,9 @@ import net.minecraft.server.level.ServerLevel;
 
 import static net.minecraft.util.Mth.floor;
 
+// Potentially render an Open GL sphere one day...
+// http://jabelarminecraft.blogspot.com/p/minecraft-forge-172-quick-tips-gl11-and.html
+
 public class ParticleSphere {
 
     public ServerLevel world;
