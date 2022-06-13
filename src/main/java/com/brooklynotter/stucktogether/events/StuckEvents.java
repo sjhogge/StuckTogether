@@ -1,6 +1,8 @@
 package com.brooklynotter.stucktogether.events;
 import com.brooklynotter.stucktogether.StuckTogether;
+import com.brooklynotter.stucktogether.entities.DeathSphere;
 import com.brooklynotter.stucktogether.entities.ParticleSphere;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -8,6 +10,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -19,6 +23,8 @@ import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = StuckTogether.MOD_ID )
 public class StuckEvents {
+
+    private static int delayTicker;
 
     @SubscribeEvent
     public void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event){
@@ -55,23 +61,6 @@ public class StuckEvents {
 //            // spawn anvil at player pos + 10 blocks up
 //        }
 //
-
-
-//    @SubscribeEvent
-//    public static void onPlayerTickDrawSphereOfDeath (TickEvent.PlayerTickEvent event) {
-//        if (event.phase == TickEvent.Phase.END) {
-//            Player player = event.player;
-//            Level level = player.getLevel();
-//            if (!level.isClientSide) {
-//                ServerLevel serverlevel = (ServerLevel)level;
-//                BlockPos center = player.getOnPos();
-//                ParticleSphere sphere = new ParticleSphere();
-//                sphere.level = serverlevel;
-//                sphere.center = center;
-//                sphere.SpawnSphereParticles();
-//            }
-//        }
-//    }
 
 
 //    @SubscribeEvent

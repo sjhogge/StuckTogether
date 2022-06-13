@@ -40,16 +40,14 @@ public class ParticleSphere {
         return points;
     }
 
-    public void SpawnSphereParticles(float sphereRadius){
-        ParticleOptions particleoptions = ParticleTypes.ELECTRIC_SPARK;
-
+    public void SpawnSphereParticles(float sphereRadius, ParticleOptions particleOptions){
         Vector3d[] spherePoints = this.generateFibSphere((int)sphereRadius * 100, sphereRadius);
 
         for (Vector3d spherePoint : spherePoints) {
             double x = spherePoint.x + center.getX();
             double y = spherePoint.y + center.getY();
             double z = spherePoint.z + center.getZ();
-            world.sendParticles(particleoptions, x, y, z, 1, 0, 0, 0, 0);
+            world.sendParticles(particleOptions, x, y, z, 1, 0, 0, 0, 0);
         }
     }
 }
