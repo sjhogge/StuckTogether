@@ -12,6 +12,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.PlayerList;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -29,18 +30,16 @@ import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-import static com.brooklynotter.stucktogether.StuckTogether.LOGGER;
+import static com.brooklynotter.stucktogether.StuckTogether.SERVER;
 
 @Mod.EventBusSubscriber(modid = StuckTogether.MOD_ID )
 public class DeathSphere {
 
-    public static final DamageSource SPHERE_OF_DEATH = (new DamageSource("sphereOfDeath")).bypassArmor();
     public static float sphereRadius;
     public static boolean active;
     public static BlockPos sphereRespawnPosition;
-
-//    private static int respawnDelayTicker;
 
     @SubscribeEvent
     public static void onWorldTickDoSphereOfDeath(TickEvent.WorldTickEvent event){
@@ -71,8 +70,20 @@ public class DeathSphere {
                     double percentDistancePlayerIsToEdgeOfSphere = CheckPercentDistancePlayerIsFromCenterToEdgeOfSphere(player.getOnPos(), center, sphereRadius);
                     if (percentDistancePlayerIsToEdgeOfSphere >= 1) {
                         playerIsOutsideSphere = true;
-                        ServerPlayer serverPlayer = (ServerPlayer) player;
-                        sphereRespawnPosition = serverPlayer.getRespawnPosition();
+                        // WHY U NO WORK????
+                        if(player.level.dimension() == Level.OVERWORLD){
+                            ServerPlayer subServerPlayer = (ServerPlayer) player;
+                            sphereRespawnPosition = subServerPlayer.getLevel().getSharedSpawnPos();
+                        }
+//                        List<BlockPos> respawnPosList = new ArrayList<>();
+//                        for(Player subPlayer : playersInDimension) {
+//                            ServerPlayer subServerPlayer = (ServerPlayer) subPlayer;
+//                            respawnPosList.add(subServerPlayer.getRespawnPosition());
+//                        }
+//                        System.out.println(respawnPosList);
+//                        Random rand = new Random();
+//                        sphereRespawnPosition = respawnPosList.get(rand.nextInt(respawnPosList.size()));
+//                        serverlevel.setDefaultSpawnPos(sphereRespawnPosition, 0);
                         break;
                     } else {
                         maxPercentDistanceToEdgeOfSphereForAlPlayers =
@@ -82,7 +93,8 @@ public class DeathSphere {
 
                 if (playerIsOutsideSphere) {
                     for(Player player : playersInDimension) {
-                        player.die(SPHERE_OF_DEATH);
+                        ServerPlayer serverPlayer = (ServerPlayer)player;
+                        serverPlayer.kill();
                     }
                 } else {
                     ParticleOptions particleOptions;
@@ -96,7 +108,18 @@ public class DeathSphere {
             }
         }
     }
-    
+
+    @SubscribeEvent
+    public static void OnPlayerDeathSetSpawn(LivingDeathEvent event) {
+        if(event.getEntityLiving() instanceof Player player && DeathSphere.active) {
+            ServerPlayer serverPlayer = (ServerPlayer) player;
+            serverPlayer.setRespawnPosition(Level.OVERWORLD, sphereRespawnPosition, 0, false, false);
+            for(ServerPlayer otherServerPlayer : SERVER.getPlayerList().getPlayers()) {
+                otherServerPlayer.kill();
+            }
+        }
+    }
+
     private static double CheckPercentDistancePlayerIsFromCenterToEdgeOfSphere(BlockPos playerPos, BlockPos spherePos, double sphereRadius) {
         double d0 = playerPos.getX() - spherePos.getX();
         double d1 = playerPos.getY() - spherePos.getY();

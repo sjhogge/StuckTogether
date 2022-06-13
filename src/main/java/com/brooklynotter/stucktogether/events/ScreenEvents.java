@@ -33,15 +33,15 @@ public class ScreenEvents {
     @SubscribeEvent
     public static void handleDelayTicker(TickEvent.ClientTickEvent event) {
         if (deathSphereActive && event.phase == TickEvent.Phase.END){
-            if (respawnDelayTicker != 30 && ScreenEvents.playerDeathScreen != null){
+            if (respawnDelayTicker != 40 && ScreenEvents.playerDeathScreen != null){
                 respawnDelayTicker++;
-                System.out.println("Incrementing delay ticker");
+//                System.out.println("Incrementing delay ticker");
             } else if (ScreenEvents.playerDeathScreen != null) {
                 Double[] clickPos = {((double)ScreenEvents.playerDeathScreen.width)/2 - 100, ((double)ScreenEvents.playerDeathScreen.height)/4 + 72};
                 ScreenEvents.playerDeathScreen.mouseClicked(clickPos[0], clickPos[1], 0); // 0 for left button
                 MinecraftForge.EVENT_BUS.post(new ScreenEvent.MouseClickedEvent.Pre(ScreenEvents.playerDeathScreen, clickPos[0], clickPos[1], 0));
                 ScreenEvents.playerDeathScreen = null;
-                System.out.println("Handle death screen here!");
+//                System.out.println("Handle death screen here!");
                 respawnDelayTicker = 0;
             }
         }

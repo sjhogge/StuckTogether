@@ -16,9 +16,9 @@ apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '0.0.1-1.18.1'
+version = '0.0.6-1.18.1'
 group = 'com.brooklynotter.' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = ''
+archivesBaseName = 'StuckTogether'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

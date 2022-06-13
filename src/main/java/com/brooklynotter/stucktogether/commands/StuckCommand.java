@@ -58,6 +58,10 @@ public class StuckCommand {
         return 0;
     }
     public static int sizeModule(CommandContext<CommandSourceStack> context, int sphereRadius){
+        for(ServerPlayer player : SERVER.getPlayerList().getPlayers()) {
+            TranslatableComponent successText = new TranslatableComponent("Stuck Together Sphere Radius Updated to " + String.valueOf(sphereRadius));
+            player.sendMessage(successText, player.getUUID());
+        }
         DeathSphere.sphereRadius = sphereRadius;
         return 1;
     }
