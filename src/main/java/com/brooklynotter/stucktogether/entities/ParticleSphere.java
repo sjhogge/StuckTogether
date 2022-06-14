@@ -43,14 +43,18 @@ public class ParticleSphere {
         return points;
     }
 
-    public void SpawnSphereParticles(float sphereRadius, ParticleOptions particleOptions){
+    public void SpawnSphereParticles(float sphereRadius, ParticleOptions particleOptions, int cycleStart, int increment){
         Vector3d[] spherePoints = this.generateFibSphere((int)sphereRadius * 100, sphereRadius);
 
-        for (Vector3d spherePoint : spherePoints) {
-            double x = spherePoint.x + center.getX();
-            double y = spherePoint.y + center.getY();
-            double z = spherePoint.z + center.getZ();
+        for(int i = cycleStart; i < spherePoints.length; i += increment){
+
+//        }
+//        for (Vector3d spherePoint : spherePoints) {
+            double x = spherePoints[i].x + center.getX();
+            double y = spherePoints[i].y + center.getY();
+            double z = spherePoints[i].z + center.getZ();
             world.sendParticles(particleOptions, x, y, z, 1, 0, 0, 0, 0);
+//            System.out.println(i);
         }
     }
 }

@@ -70,7 +70,13 @@ public class StuckTogether
             NetworkManager.CHANNEL.sendTo(new StatusChangedPacket(true),
                     player.connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
-            // Todo: TP player to center of sphere if not the only player in the dimension
+
+            for (ServerPlayer otherPlayer : SERVER.getPlayerList().getPlayers()) {
+                if(otherPlayer != player && otherPlayer.getLevel() == player.getLevel()){
+                    player.teleportTo(otherPlayer.getBlockX(), otherPlayer.getBlockY(), otherPlayer.getBlockZ());
+                    break;
+                }
+            }
         }
     }
 
@@ -79,6 +85,5 @@ public class StuckTogether
         DeathSphere.active = false;
         DeathSphere.sphereRadius = 10;
         DeathSphere.sphereRespawnPosition = SERVER.getLevel(Level.OVERWORLD).getSharedSpawnPos();
-        System.out.println(SERVER.getLevel(Level.OVERWORLD).getSharedSpawnPos());
     }
 }
