@@ -7,22 +7,28 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.awt.*;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 public class SphereTeam implements INBTSerializable<CompoundTag> {
 
-    protected @Nullable String teamName;
-    protected @Nullable Color sphereColor; // For future uses, maybe? :P
-    protected @Nonnull Set<UUID> members;
+    protected String teamName;
+    protected Color sphereColor; // For future uses, maybe? :P
+    protected UUID leader;
+    protected Set<UUID> members;
 
-    public SphereTeam() {
-        this.members = new HashSet<>();
+    public SphereTeam(CompoundTag tag) {
+        deserializeNBT(tag);
+    }
+
+    public SphereTeam(UUID leader) {
+        this.leader = leader;
+        this.members = new HashSet<>(Collections.singleton(leader));
     }
 
     @Nullable
@@ -73,6 +79,7 @@ public class SphereTeam implements INBTSerializable<CompoundTag> {
             nbt.putInt("SphereColor", sphereColor.getRGB());
         }
 
+        nbt.put("Leader", NBTHelper.serializeUUID(leader));
         nbt.put("Members", NBTHelper.serializeCollection(members, NBTHelper::serializeUUID));
 
         return nbt;
@@ -89,6 +96,7 @@ public class SphereTeam implements INBTSerializable<CompoundTag> {
         }
 
         ListTag membersNBT = nbt.getList("Members", Tag.TAG_STRING);
+        this.leader = UUID.fromString(nbt.getString("Leader"));
         this.members = NBTHelper.deserializeCollection(membersNBT, StringTag.class, HashSet::new, NBTHelper::deserializeUUID);
     }
 

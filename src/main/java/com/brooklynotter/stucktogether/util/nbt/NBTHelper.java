@@ -3,7 +3,6 @@ package com.brooklynotter.stucktogether.util.nbt;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -18,14 +17,6 @@ public final class NBTHelper {
 
     public static UUID deserializeUUID(StringTag stringTag) {
         return UUID.fromString(stringTag.getAsString());
-    }
-
-    public static <N extends Tag, S extends INBTSerializable<N>> Function<N, S> deserializer(Supplier<S> initializer) {
-        return (nbt) -> {
-            S serializable = initializer.get();
-            serializable.deserializeNBT(nbt);
-            return serializable;
-        };
     }
 
     public static <T, N extends Tag> ListTag serializeCollection(Collection<T> collection, Function<T, N> mapper) {

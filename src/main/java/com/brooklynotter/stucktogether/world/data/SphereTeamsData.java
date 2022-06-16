@@ -2,16 +2,22 @@ package com.brooklynotter.stucktogether.world.data;
 
 import com.brooklynotter.stucktogether.StuckTogether;
 import com.brooklynotter.stucktogether.data.SphereTeam;
+import com.brooklynotter.stucktogether.packets.NetworkManager;
+import com.brooklynotter.stucktogether.packets.SyncSphereTeamsPacket;
+import com.brooklynotter.stucktogether.util.CollectionHelper;
 import com.brooklynotter.stucktogether.util.nbt.NBTHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SphereTeamsData extends SavedData {
 
@@ -21,6 +27,44 @@ public class SphereTeamsData extends SavedData {
 
     public SphereTeamsData() {
         this.teams = new ArrayList<>();
+    }
+
+    @Nullable
+    public SphereTeam getTeamOf(UUID playerUUID) {
+        return CollectionHelper.find(teams, team -> team.hasMember(playerUUID));
+    }
+
+    /* ------------------------- */
+
+    public boolean createTeam(MinecraftServer server, UUID leaderUUID) {
+        if (getTeamOf(leaderUUID) != null) return false;
+
+        SphereTeam sphereTeam = new SphereTeam(leaderUUID);
+        teams.add(sphereTeam);
+
+        setDirty();
+        sync(server);
+        return true;
+    }
+
+    public boolean addMember(MinecraftServer server, SphereTeam team, UUID playerUUID) {
+        if (getTeamOf(playerUUID) != null) return false;
+
+        team.addMember(playerUUID);
+
+        setDirty();
+        sync(server);
+        return true;
+    }
+
+    public boolean removeMember(MinecraftServer server, SphereTeam team, UUID playerUUID) {
+        if (getTeamOf(playerUUID) == null) return false;
+
+        team.removeMember(playerUUID);
+
+        setDirty();
+        sync(server);
+        return true;
     }
 
     /* ------------------------- */
@@ -36,9 +80,14 @@ public class SphereTeamsData extends SavedData {
         SphereTeamsData data = new SphereTeamsData();
         if (nbt.contains("Teams", Tag.TAG_LIST)) {
             ListTag teamsNBT = nbt.getList("Teams", Tag.TAG_COMPOUND);
-            data.teams = NBTHelper.deserializeCollection(teamsNBT, CompoundTag.class, ArrayList::new, NBTHelper.deserializer(SphereTeam::new));
+            data.teams = NBTHelper.deserializeCollection(teamsNBT, CompoundTag.class, ArrayList::new, SphereTeam::new);
         }
         return data;
+    }
+
+    public void sync(MinecraftServer server) {
+        SyncSphereTeamsPacket packet = new SyncSphereTeamsPacket(NBTHelper.serializeCollection(teams, SphereTeam::serializeNBT));
+        NetworkManager.CHANNEL.send(PacketDistributor.ALL.noArg(), packet);
     }
 
     /* ------------------------- */
