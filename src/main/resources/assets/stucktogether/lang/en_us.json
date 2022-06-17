@@ -1,0 +1,17 @@
+{
+  "commands.stucktogether.team.info.title": "My Sphere Team:",
+  "commands.stucktogether.team.info.no_team": "Not in a Sphere Team",
+
+  "commands.stucktogether.team.create.success": "You have created a Sphere Team successfully.",
+  "commands.stucktogether.team.create.already_in_team": "You cannot create a new Sphere Team, while you are already in one.",
+
+  "commands.stucktogether.team.add.success": "%1$s is added to the team successfully.",
+  "commands.stucktogether.team.add.no_team": "You are not in a team.",
+  "commands.stucktogether.team.add.not_leader": "Only the leader can add members.",
+  "commands.stucktogether.team.add.already_in_team": "%1$s is already in another team.",
+
+  "commands.stucktogether.team.kick.success": "%1$s is kicked from the team successfully.",
+  "commands.stucktogether.team.kick.no_team": "You are not in a team.",
+  "commands.stucktogether.team.kick.not_leader": "Only the leader can kick members.",
+  "commands.stucktogether.team.kick.not_in_this_team": "%1$s is not in the team."
+}

@@ -6,7 +6,9 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 public class NetworkManager {
-    private static final String PROTOCOL_VERSION = "1";
+
+    private static final String PROTOCOL_VERSION = "2";
+
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(new ResourceLocation(StuckTogether.MOD_ID, "network"))
             .clientAcceptedVersions(v -> v.equals(PROTOCOL_VERSION))
@@ -19,5 +21,10 @@ public class NetworkManager {
                 StatusChangedPacket::encode,
                 StatusChangedPacket::decode,
                 StatusChangedPacket::handle);
+
+        CHANNEL.registerMessage(1, SyncSphereTeamsPacket.class,
+                SyncSphereTeamsPacket::encode,
+                SyncSphereTeamsPacket::decode,
+                SyncSphereTeamsPacket::handle);
     }
 }
