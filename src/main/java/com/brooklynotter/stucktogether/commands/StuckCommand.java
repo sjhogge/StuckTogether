@@ -1,7 +1,8 @@
 package com.brooklynotter.stucktogether.commands;
 
+import com.brooklynotter.stucktogether.StuckTogether;
+import com.brooklynotter.stucktogether.configurations.ServerConfigurations;
 import com.brooklynotter.stucktogether.data.SphereTeam;
-import com.brooklynotter.stucktogether.events.DeathSphereEvents;
 import com.brooklynotter.stucktogether.packets.NetworkManager;
 import com.brooklynotter.stucktogether.packets.StatusChangedPacket;
 import com.brooklynotter.stucktogether.world.data.SphereTeamsData;
@@ -47,6 +48,9 @@ public class StuckCommand {
                         .executes(ctx -> sizeModule(ctx, IntegerArgumentType.getInteger(ctx, "value"))))
         );
 
+        root.then(Commands.literal("reloadcfg")
+                .executes(StuckCommand::reloadConfigs));
+
         root.then(Commands.literal("teams")
                 .then(Commands.literal("info")
                         .executes(StuckCommand::teamInfo))
@@ -71,7 +75,8 @@ public class StuckCommand {
                     player.connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
-        DeathSphereEvents.active = true;
+        ServerConfigurations.SPHERE.active = true;
+        ServerConfigurations.saveDirtyConfigs();
         return 0;
     }
 
@@ -83,7 +88,8 @@ public class StuckCommand {
                     player.connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
-        DeathSphereEvents.active = false;
+        ServerConfigurations.SPHERE.active = true;
+        ServerConfigurations.saveDirtyConfigs();
         return 0;
     }
 
@@ -92,8 +98,16 @@ public class StuckCommand {
             TranslatableComponent successText = new TranslatableComponent("Stuck Together Sphere Radius Updated to " + String.valueOf(sphereRadius));
             player.sendMessage(successText, player.getUUID());
         }
-        DeathSphereEvents.sphereRadius = sphereRadius;
+        ServerConfigurations.SPHERE.sphereRadius = sphereRadius;
+        ServerConfigurations.saveDirtyConfigs();
         return 1;
+    }
+
+    public static int reloadConfigs(CommandContext<CommandSourceStack> context) {
+        StuckTogether.LOGGER.info("Reloading server configs...");
+        ServerConfigurations.initialize();
+        StuckTogether.LOGGER.info("Reloading server configs succeeded!");
+        return 0;
     }
 
     public static int teamInfo(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

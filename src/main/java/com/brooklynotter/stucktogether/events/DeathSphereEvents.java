@@ -2,6 +2,7 @@ package com.brooklynotter.stucktogether.events;
 
 import com.brooklynotter.stucktogether.StuckTogether;
 import com.brooklynotter.stucktogether.client.particles.ParticleSphere;
+import com.brooklynotter.stucktogether.configurations.ServerConfigurations;
 import com.brooklynotter.stucktogether.data.SphereTeam;
 import com.brooklynotter.stucktogether.packets.NetworkManager;
 import com.brooklynotter.stucktogether.packets.StatusChangedPacket;
@@ -27,18 +28,14 @@ import static com.brooklynotter.stucktogether.StuckTogether.SERVER;
 @Mod.EventBusSubscriber(modid = StuckTogether.MOD_ID)
 public class DeathSphereEvents {
 
-    // TODO: Turn those 2 variables into actual configs
-    public static boolean active;
-    public static float sphereRadius;
-
     private static int particleSphereTicker;
     private final static int MAX_PARTICLE_SPHERE_TICKER = 5;
 
     @SubscribeEvent
     public static void onServerTickDoSphereOfDeath(TickEvent.ServerTickEvent event) {
-        if (!active) return;
         if (event.phase != TickEvent.Phase.END) return;
         if (event.type != TickEvent.Type.SERVER) return; // How would this be possible?
+        if (!ServerConfigurations.SPHERE.active) return;
         if (SERVER == null) return;
 
         teamLoop:
@@ -53,7 +50,7 @@ public class DeathSphereEvents {
             for (ServerPlayer member : onlineMembers) {
                 sphere.world = member.getLevel();
 
-                double percentToEdge = team.percentToEdge(SERVER, member.position(), sphereRadius);
+                double percentToEdge = team.percentToEdge(SERVER, member.position(), ServerConfigurations.SPHERE.sphereRadius);
 
                 if (percentToEdge >= 1) {
                     BlockPos respawnPosition = team.randomRespawnPosition(SERVER);
@@ -72,7 +69,7 @@ public class DeathSphereEvents {
                 ParticleOptions particleType = maxPercentToEdge < 0.075
                         ? ParticleTypes.ELECTRIC_SPARK
                         : ParticleTypes.SMALL_FLAME;
-                sphere.spawnSphereParticles(sphereRadius, particleType, particleSphereTicker, MAX_PARTICLE_SPHERE_TICKER);
+                sphere.spawnSphereParticles(ServerConfigurations.SPHERE.sphereRadius, particleType, particleSphereTicker, MAX_PARTICLE_SPHERE_TICKER);
             }
 
         }
@@ -82,8 +79,8 @@ public class DeathSphereEvents {
 
     @SubscribeEvent
     public static void onPlayerDeathSetSpawn(LivingDeathEvent event) {
-        if (!active) return;
         if (!(event.getEntityLiving() instanceof ServerPlayer dyingPlayer)) return;
+        if (!ServerConfigurations.SPHERE.active) return;
 
         MinecraftServer server = dyingPlayer.getServer();
         if (server == null) return;
@@ -102,8 +99,8 @@ public class DeathSphereEvents {
 
     @SubscribeEvent
     public static void onPlayerChangeDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        if (!active) return;
         if (!(event.getPlayer() instanceof ServerPlayer player)) return;
+        if (!ServerConfigurations.SPHERE.active) return;
 
         MinecraftServer server = player.getServer();
         if (server == null) return;
@@ -133,11 +130,11 @@ public class DeathSphereEvents {
 
         player.sendMessage(new TranslatableComponent("Welcome to your doom :)"), player.getUUID());
         player.sendMessage(new TranslatableComponent("Joined Stuck Together!"), player.getUUID());
-        NetworkManager.CHANNEL.sendTo(new StatusChangedPacket(active),
+        NetworkManager.CHANNEL.sendTo(new StatusChangedPacket(ServerConfigurations.SPHERE.active),
                 player.connection.connection,
                 NetworkDirection.PLAY_TO_CLIENT);
 
-        if (!DeathSphereEvents.active) return;
+        if (!ServerConfigurations.SPHERE.active) return;
 
         MinecraftServer server = player.getServer();
         if (server == null) return;
