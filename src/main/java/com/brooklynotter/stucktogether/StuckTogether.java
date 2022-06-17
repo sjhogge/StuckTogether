@@ -1,7 +1,7 @@
 package com.brooklynotter.stucktogether;
 
 import com.brooklynotter.stucktogether.commands.StuckCommand;
-import com.brooklynotter.stucktogether.events.DeathSphereEvents;
+import com.brooklynotter.stucktogether.configurations.ServerConfigurations;
 import com.brooklynotter.stucktogether.packets.NetworkManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,11 +20,11 @@ import org.apache.logging.log4j.Logger;
 //To RUN the Gradle build : go to the Gradle Tab -> Tasks -> forgegradle runs -> runClient
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(StuckTogether.MOD_ID)
-public class StuckTogether
-{
+public class StuckTogether {
+
     public static final String MOD_ID = "stucktogether";
-    // Directly reference a log4j logger.
     public static final Logger LOGGER = LogManager.getLogger();
+
     public static MinecraftServer SERVER;
 
     public StuckTogether() {
@@ -50,13 +50,13 @@ public class StuckTogether
     }
 
     @SubscribeEvent
-    public void onServerStarting (ServerStartingEvent event) {
-        // Do Nothing
+    public void onServerStarting(ServerStartingEvent event) {
+        ServerConfigurations.initialize();
     }
 
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event) {
-        DeathSphereEvents.active = false;
-        DeathSphereEvents.sphereRadius = 10;
+//        DeathSphereEvents.active = false;
+//        DeathSphereEvents.sphereRadius = 10;
     }
 }
