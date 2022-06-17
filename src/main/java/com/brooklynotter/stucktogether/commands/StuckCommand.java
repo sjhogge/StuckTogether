@@ -1,7 +1,7 @@
 package com.brooklynotter.stucktogether.commands;
 
 import com.brooklynotter.stucktogether.data.SphereTeam;
-import com.brooklynotter.stucktogether.entities.DeathSphere;
+import com.brooklynotter.stucktogether.events.DeathSphereEvents;
 import com.brooklynotter.stucktogether.packets.NetworkManager;
 import com.brooklynotter.stucktogether.packets.StatusChangedPacket;
 import com.brooklynotter.stucktogether.world.data.SphereTeamsData;
@@ -71,7 +71,7 @@ public class StuckCommand {
                     player.connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
-        DeathSphere.active = true;
+        DeathSphereEvents.active = true;
         return 0;
     }
 
@@ -83,7 +83,7 @@ public class StuckCommand {
                     player.connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
-        DeathSphere.active = false;
+        DeathSphereEvents.active = false;
         return 0;
     }
 
@@ -92,7 +92,7 @@ public class StuckCommand {
             TranslatableComponent successText = new TranslatableComponent("Stuck Together Sphere Radius Updated to " + String.valueOf(sphereRadius));
             player.sendMessage(successText, player.getUUID());
         }
-        DeathSphere.sphereRadius = sphereRadius;
+        DeathSphereEvents.sphereRadius = sphereRadius;
         return 1;
     }
 

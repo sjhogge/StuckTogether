@@ -1,6 +1,6 @@
 package com.brooklynotter.stucktogether.packets;
 
-import com.brooklynotter.stucktogether.client.data.ClientSphereTeamsData;
+import com.brooklynotter.stucktogether.client.ClientSphereTeamsData;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

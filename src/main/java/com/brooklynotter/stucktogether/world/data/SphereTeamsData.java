@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +28,10 @@ public class SphereTeamsData extends SavedData {
 
     public SphereTeamsData() {
         this.teams = new ArrayList<>();
+    }
+
+    public List<SphereTeam> getTeams() {
+        return Collections.unmodifiableList(teams);
     }
 
     @Nullable

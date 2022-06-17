@@ -1,4 +1,4 @@
-package com.brooklynotter.stucktogether.client.data;
+package com.brooklynotter.stucktogether.client;
 
 import com.brooklynotter.stucktogether.data.SphereTeam;
 import com.brooklynotter.stucktogether.util.CollectionHelper;

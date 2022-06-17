@@ -1,20 +1,21 @@
 package com.brooklynotter.stucktogether.data;
 
 import com.brooklynotter.stucktogether.util.nbt.NBTHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.List;
+import java.util.*;
 
 public class SphereTeam implements INBTSerializable<CompoundTag> {
 
@@ -52,6 +53,49 @@ public class SphereTeam implements INBTSerializable<CompoundTag> {
     @NotNull
     public Set<UUID> getMembers() {
         return Collections.unmodifiableSet(members);
+    }
+
+    public List<ServerPlayer> getOnlineMembers(MinecraftServer server) {
+        return members.stream()
+                .map(server.getPlayerList()::getPlayer)
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    public BlockPos getCenter(MinecraftServer server) {
+        float x = 0, y = 0, z = 0;
+        int onlineCount = 0;
+
+        for (ServerPlayer member : getOnlineMembers(server)) {
+            BlockPos pos = member.getOnPos();
+            x += pos.getX();
+            y += pos.getY();
+            z += pos.getZ();
+            onlineCount++;
+        }
+
+        return new BlockPos(
+                x / onlineCount,
+                y / onlineCount,
+                z / onlineCount);
+    }
+
+    public double percentToEdge(MinecraftServer server, Vec3 pos, float allowedRadius) {
+        BlockPos center = getCenter(server);
+        double dx = pos.x() - center.getX();
+        double dy = pos.y() - center.getY();
+        double dz = pos.z() - center.getZ();
+        double radiusSq = allowedRadius * allowedRadius;
+        return 1 - (radiusSq - (dx * dx + dy * dy + dz * dz)) / radiusSq;
+    }
+
+    public BlockPos randomRespawnPosition(MinecraftServer server) {
+        List<BlockPos> respawnLocations = getOnlineMembers(server).stream()
+                .map(ServerPlayer::getRespawnPosition)
+                .toList();
+        return respawnLocations.size() == 0
+                ? server.overworld().getSharedSpawnPos()
+                : respawnLocations.get(server.overworld().getRandom().nextInt(respawnLocations.size()));
     }
 
     public boolean hasMember(ServerPlayer player) {
