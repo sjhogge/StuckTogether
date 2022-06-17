@@ -36,35 +36,32 @@ public class SphereTeamsData extends SavedData {
 
     /* ------------------------- */
 
-    public boolean createTeam(MinecraftServer server, UUID leaderUUID) {
-        if (getTeamOf(leaderUUID) != null) return false;
+    public void createTeam(MinecraftServer server, UUID leaderUUID) {
+        if (getTeamOf(leaderUUID) != null) return;
 
         SphereTeam sphereTeam = new SphereTeam(leaderUUID);
         teams.add(sphereTeam);
 
         setDirty();
         sync(server);
-        return true;
     }
 
-    public boolean addMember(MinecraftServer server, SphereTeam team, UUID playerUUID) {
-        if (getTeamOf(playerUUID) != null) return false;
+    public void addMember(MinecraftServer server, SphereTeam team, UUID playerUUID) {
+        if (getTeamOf(playerUUID) != null) return;
 
         team.addMember(playerUUID);
 
         setDirty();
         sync(server);
-        return true;
     }
 
-    public boolean removeMember(MinecraftServer server, SphereTeam team, UUID playerUUID) {
-        if (getTeamOf(playerUUID) == null) return false;
+    public void removeMember(MinecraftServer server, SphereTeam team, UUID playerUUID) {
+        if (getTeamOf(playerUUID) == null) return;
 
         team.removeMember(playerUUID);
 
         setDirty();
         sync(server);
-        return true;
     }
 
     /* ------------------------- */

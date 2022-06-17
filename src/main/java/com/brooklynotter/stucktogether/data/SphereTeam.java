@@ -7,6 +7,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.common.util.INBTSerializable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
@@ -17,16 +18,18 @@ import java.util.UUID;
 
 public class SphereTeam implements INBTSerializable<CompoundTag> {
 
-    protected String teamName;
-    protected Color sphereColor; // For future uses, maybe? :P
-    protected UUID leader;
-    protected Set<UUID> members;
+    protected @Nullable String teamName;
+    protected @Nullable Color sphereColor; // For future uses, maybe? :P
+    protected @NotNull UUID leader;
+    protected @NotNull Set<UUID> members;
 
     public SphereTeam(CompoundTag tag) {
+        this.leader = new UUID(0, 0);
+        this.members = new HashSet<>();
         deserializeNBT(tag);
     }
 
-    public SphereTeam(UUID leader) {
+    public SphereTeam(@NotNull UUID leader) {
         this.leader = leader;
         this.members = new HashSet<>(Collections.singleton(leader));
     }
@@ -39,6 +42,16 @@ public class SphereTeam implements INBTSerializable<CompoundTag> {
     @Nullable
     public Color getSphereColor() {
         return sphereColor;
+    }
+
+    @NotNull
+    public UUID getLeader() {
+        return leader;
+    }
+
+    @NotNull
+    public Set<UUID> getMembers() {
+        return Collections.unmodifiableSet(members);
     }
 
     public boolean hasMember(ServerPlayer player) {
