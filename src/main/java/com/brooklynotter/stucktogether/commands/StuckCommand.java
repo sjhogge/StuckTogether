@@ -88,7 +88,7 @@ public class StuckCommand {
                     player.connection.connection,
                     NetworkDirection.PLAY_TO_CLIENT);
         }
-        ServerConfigurations.SPHERE.active = true;
+        ServerConfigurations.SPHERE.active = false;
         ServerConfigurations.saveDirtyConfigs();
         return 0;
     }
@@ -177,7 +177,7 @@ public class StuckCommand {
             return -1;
         }
 
-        data.addMember(server, team, sourcePlayer.getUUID());
+        data.addMember(server, team, player.getUUID());
         context.getSource().sendSuccess(new TranslatableComponent("commands.stucktogether.team.add.success", player.getDisplayName().getString()), true);
         return 0;
     }
@@ -207,7 +207,7 @@ public class StuckCommand {
             return -1;
         }
 
-        data.removeMember(server, team, sourcePlayer.getUUID());
+        data.removeMember(server, team, player.getUUID());
         context.getSource().sendSuccess(new TranslatableComponent("commands.stucktogether.team.kick.success", player.getDisplayName().getString()), true);
         return 0;
     }

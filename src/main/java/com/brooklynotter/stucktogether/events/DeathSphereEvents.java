@@ -66,7 +66,7 @@ public class DeathSphereEvents {
             }
 
             if (onlineMembers.size() != 0) {
-                ParticleOptions particleType = maxPercentToEdge < 0.075
+                ParticleOptions particleType = maxPercentToEdge < 0.75
                         ? ParticleTypes.ELECTRIC_SPARK
                         : ParticleTypes.SMALL_FLAME;
                 sphere.spawnSphereParticles(ServerConfigurations.SPHERE.sphereRadius, particleType, particleSphereTicker, MAX_PARTICLE_SPHERE_TICKER);
