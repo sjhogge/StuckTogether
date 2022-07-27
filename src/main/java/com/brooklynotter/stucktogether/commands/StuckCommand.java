@@ -76,7 +76,7 @@ public class StuckCommand {
                     NetworkDirection.PLAY_TO_CLIENT);
         }
         ServerConfigurations.SPHERE.active = true;
-        ServerConfigurations.saveDirtyConfigs();
+//        ServerConfigurations.saveDirtyConfigs();
         return 0;
     }
 
@@ -89,7 +89,7 @@ public class StuckCommand {
                     NetworkDirection.PLAY_TO_CLIENT);
         }
         ServerConfigurations.SPHERE.active = false;
-        ServerConfigurations.saveDirtyConfigs();
+//        ServerConfigurations.saveDirtyConfigs();
         return 0;
     }
 
@@ -99,14 +99,14 @@ public class StuckCommand {
             player.sendMessage(successText, player.getUUID());
         }
         ServerConfigurations.SPHERE.sphereRadius = sphereRadius;
-        ServerConfigurations.saveDirtyConfigs();
+//        ServerConfigurations.saveDirtyConfigs();
         return 1;
     }
 
     public static int reloadConfigs(CommandContext<CommandSourceStack> context) {
-        StuckTogether.LOGGER.info("Reloading server configs...");
-        ServerConfigurations.initialize();
-        StuckTogether.LOGGER.info("Reloading server configs succeeded!");
+//        StuckTogether.LOGGER.info("Reloading server configs...");
+//        ServerConfigurations.initialize();
+//        StuckTogether.LOGGER.info("Reloading server configs succeeded!");
         return 0;
     }
 
