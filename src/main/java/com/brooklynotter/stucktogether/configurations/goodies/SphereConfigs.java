@@ -1,8 +1,8 @@
 package com.brooklynotter.stucktogether.configurations.goodies;
 
-import net.programmer.igoodie.goodies.configuration.JsonConfiGoodie;
-import net.programmer.igoodie.goodies.configuration.validation.annotation.GoodieInteger;
-import net.programmer.igoodie.goodies.serialization.annotation.Goodie;
+//import net.programmer.igoodie.goodies.configuration.JsonConfiGoodie;
+//import net.programmer.igoodie.goodies.configuration.validation.annotation.GoodieInteger;
+//import net.programmer.igoodie.goodies.serialization.annotation.Goodie;
 
 //public class SphereConfigs extends JsonConfiGoodie {
 public class SphereConfigs {
