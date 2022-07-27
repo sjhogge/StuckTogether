@@ -92,7 +92,7 @@ public class DeathSphereEvents {
         BlockPos respawnPosition = team.randomRespawnPosition(server);
 
         for (ServerPlayer member : team.getOnlineMembers(server)) {
-            member.setRespawnPosition(dyingPlayer.getLevel().dimension(), respawnPosition, 0, true, false);
+            member.setRespawnPosition(SERVER.overworld().dimension(), respawnPosition, 0, true, false);
             member.kill();
         }
     }
