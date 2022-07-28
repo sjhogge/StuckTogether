@@ -32,44 +32,45 @@ import static com.brooklynotter.stucktogether.StuckTogether.SERVER;
 
 public class StuckCommand {
 
-    public static final String COMMAND_NAME = "stucktogether";
+    public static final String[] COMMAND_NAMES  = {"stucktogether", "st"};
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
 
-        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal(COMMAND_NAME);
+        for (String commandName : COMMAND_NAMES){
+            LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal(commandName);
 
-        root.then(Commands.literal("start")
-                .executes(StuckCommand::startModule));
+            root.then(Commands.literal("start")
+                    .executes(StuckCommand::startModule));
 
-        root.then(Commands.literal("stop")
-                .executes(StuckCommand::stopModule));
+            root.then(Commands.literal("stop")
+                    .executes(StuckCommand::stopModule));
 
-        root.then(Commands.literal("size")
-                .then(Commands.argument("value", IntegerArgumentType.integer(5, 100))
-                        .executes(ctx -> sizeModule(ctx, IntegerArgumentType.getInteger(ctx, "value"))))
-        );
+            root.then(Commands.literal("size")
+                    .then(Commands.argument("value", IntegerArgumentType.integer(5, 100))
+                            .executes(ctx -> sizeModule(ctx, IntegerArgumentType.getInteger(ctx, "value"))))
+            );
 
-        root.then(Commands.literal("reloadcfg")
-                .executes(StuckCommand::reloadConfigs));
+            root.then(Commands.literal("reloadcfg")
+                    .executes(StuckCommand::reloadConfigs));
 
-        root.then(Commands.literal("teams")
-                .then(Commands.literal("info")
-                        .executes(StuckCommand::teamInfo))
-                .then(Commands.literal("create")
-                        .executes(StuckCommand::createTeam))
-                .then(Commands.literal("disband")
-                        .executes(StuckCommand::disbandTeam))
-                .then(Commands.literal("leave")
-                        .executes(StuckCommand::leaveTeam))
-                .then(Commands.literal("add")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(ctx -> addMemberToTeam(ctx, EntityArgument.getPlayer(ctx, "player")))))
-                .then(Commands.literal("kick")
-                        .then(Commands.argument("player", EntityArgument.player())
-                                .executes(ctx -> kickMemberFromTeam(ctx, EntityArgument.getPlayer(ctx, "player"))))));
+            root.then(Commands.literal("teams")
+                    .then(Commands.literal("info")
+                            .executes(StuckCommand::teamInfo))
+                    .then(Commands.literal("create")
+                            .executes(StuckCommand::createTeam))
+                    .then(Commands.literal("disband")
+                            .executes(StuckCommand::disbandTeam))
+                    .then(Commands.literal("leave")
+                            .executes(StuckCommand::leaveTeam))
+                    .then(Commands.literal("add")
+                            .then(Commands.argument("player", EntityArgument.player())
+                                    .executes(ctx -> addMemberToTeam(ctx, EntityArgument.getPlayer(ctx, "player")))))
+                    .then(Commands.literal("kick")
+                            .then(Commands.argument("player", EntityArgument.player())
+                                    .executes(ctx -> kickMemberFromTeam(ctx, EntityArgument.getPlayer(ctx, "player"))))));
 
-        dispatcher.register(root);
-
+            dispatcher.register(root);
+        }
     }
 
     public static int startModule(CommandContext<CommandSourceStack> context) {
