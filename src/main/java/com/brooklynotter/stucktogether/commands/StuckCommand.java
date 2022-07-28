@@ -23,6 +23,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.brooklynotter.stucktogether.StuckTogether.SERVER;
@@ -56,6 +57,10 @@ public class StuckCommand {
                         .executes(StuckCommand::teamInfo))
                 .then(Commands.literal("create")
                         .executes(StuckCommand::createTeam))
+                .then(Commands.literal("disband")
+                        .executes(StuckCommand::disbandTeam))
+                .then(Commands.literal("leave")
+                        .executes(StuckCommand::leaveTeam))
                 .then(Commands.literal("add")
                         .then(Commands.argument("player", EntityArgument.player())
                                 .executes(ctx -> addMemberToTeam(ctx, EntityArgument.getPlayer(ctx, "player")))))
@@ -152,6 +157,33 @@ public class StuckCommand {
         return 0;
     }
 
+    public static int leaveTeam(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        MinecraftServer server = context.getSource().getServer();
+        ServerPlayer sourcePlayer = context.getSource().getPlayerOrException();
+        SphereTeamsData data = SphereTeamsData.get(server);
+
+        SphereTeam team = data.getTeamOf(sourcePlayer.getUUID());
+
+        if (team == null) {
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.leave.not_in_team"));
+            return -1;
+        }
+
+        if (sourcePlayer.getUUID().equals(team.getLeader())) {
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.leave.leader_cannot_leave"));
+            return -1;
+        }
+
+        data.removeMember(server, team, sourcePlayer.getUUID());
+        context.getSource().sendSuccess(new TranslatableComponent("commands.stucktogether.team.leave.success"), true);
+        for(ServerPlayer serverPlayer : team.getOnlineMembers(SERVER)) {
+            if(serverPlayer.getUUID().equals(team.getLeader())) {
+                serverPlayer.sendMessage(new TranslatableComponent("commands.stucktogether.team.leave.success_notification", sourcePlayer.getDisplayName().getString()), serverPlayer.getUUID());
+            }
+        }
+        return 0;
+    }
+
     public static int addMemberToTeam(CommandContext<CommandSourceStack> context, ServerPlayer player) throws CommandSyntaxException {
         MinecraftServer server = context.getSource().getServer();
         ServerPlayer sourcePlayer = context.getSource().getPlayerOrException();
@@ -173,12 +205,13 @@ public class StuckCommand {
 
         if (data.getTeamOf(player.getUUID()) != null) {
             // Player is already in team
-            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.add.already_in_team"));
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.add.already_in_team", player.getDisplayName().getString()));
             return -1;
         }
 
         data.addMember(server, team, player.getUUID());
         context.getSource().sendSuccess(new TranslatableComponent("commands.stucktogether.team.add.success", player.getDisplayName().getString()), true);
+        player.sendMessage(new TranslatableComponent("commands.stucktogether.team.add.success_notification", sourcePlayer.getDisplayName().getString()), player.getUUID());
         return 0;
     }
 
@@ -203,13 +236,50 @@ public class StuckCommand {
 
         if (data.getTeamOf(player.getUUID()) != team) {
             // Player is not in this team
-            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.kick.not_in_this_team"));
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.kick.not_in_this_team", player.getDisplayName().getString()));
+            return -1;
+        }
+
+        if(player.getUUID() == sourcePlayer.getUUID()) {
+            // Team leader can't kick self
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.kick.leader_cant_kick_self"));
             return -1;
         }
 
         data.removeMember(server, team, player.getUUID());
         context.getSource().sendSuccess(new TranslatableComponent("commands.stucktogether.team.kick.success", player.getDisplayName().getString()), true);
+        player.sendMessage(new TranslatableComponent("commands.stucktogether.team.kick.success_notification", sourcePlayer.getDisplayName().getString()), player.getUUID());
         return 0;
+    }
+
+    public static  int disbandTeam(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
+        MinecraftServer server = context.getSource().getServer();
+        ServerPlayer sourcePlayer = context.getSource().getPlayerOrException();
+        SphereTeamsData data = SphereTeamsData.get(server);
+
+        SphereTeam team = data.getTeamOf(sourcePlayer.getUUID());
+        List<ServerPlayer> teamPlayers = team.getOnlineMembers(SERVER);
+
+        if (team == null) {
+            // Not in a team
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.disband.kick.no_team"));
+            return -1;
+        }
+
+        if (!team.getLeader().equals(sourcePlayer.getUUID())) {
+            // Not the leader
+            context.getSource().sendFailure(new TranslatableComponent("commands.stucktogether.team.disband.not_leader"));
+            return -1;
+        }
+
+        data.removeTeam(server, team, sourcePlayer.getUUID());
+        context.getSource().sendSuccess(new TranslatableComponent("commands.stucktogether.team.disband.success"), true);
+        for(ServerPlayer serverPlayer : teamPlayers) {
+            if(!serverPlayer.getUUID().equals(sourcePlayer.getUUID()))
+            serverPlayer.sendMessage(new TranslatableComponent("commands.stucktogether.team.disband.success_notification", sourcePlayer.getDisplayName().getString()), serverPlayer.getUUID());
+        }
+        return 0;
+
     }
 
 }

@@ -2,16 +2,29 @@
   "commands.stucktogether.team.info.title": "My Sphere Team:",
   "commands.stucktogether.team.info.no_team": "Not in a Sphere Team",
 
-  "commands.stucktogether.team.create.success": "You have created a Sphere Team successfully.",
-  "commands.stucktogether.team.create.already_in_team": "You cannot create a new Sphere Team, while you are already in one.",
+  "commands.stucktogether.team.create.success": "You have created a sphere team successfully.",
+  "commands.stucktogether.team.create.already_in_team": "You cannot create a new sphere team while you are already in one.",
 
-  "commands.stucktogether.team.add.success": "%1$s is added to the team successfully.",
-  "commands.stucktogether.team.add.no_team": "You are not in a team.",
-  "commands.stucktogether.team.add.not_leader": "Only the leader can add members.",
-  "commands.stucktogether.team.add.already_in_team": "%1$s is already in another team.",
+  "commands.stucktogether.team.add.success": "%1$s was added to the sphere team successfully.",
+  "commands.stucktogether.team.add.success_notification": "You were added to %1$s's sphere team.",
+  "commands.stucktogether.team.add.no_team": "You are not in a sphere team.",
+  "commands.stucktogether.team.add.not_leader": "Only the leader can add members to the sphere team.",
+  "commands.stucktogether.team.add.already_in_team": "%1$s is already in a sphere team.",
 
-  "commands.stucktogether.team.kick.success": "%1$s is kicked from the team successfully.",
-  "commands.stucktogether.team.kick.no_team": "You are not in a team.",
-  "commands.stucktogether.team.kick.not_leader": "Only the leader can kick members.",
-  "commands.stucktogether.team.kick.not_in_this_team": "%1$s is not in the team."
+  "commands.stucktogether.team.kick.success": "%1$s was kicked from the sphere team successfully.",
+  "commands.stucktogether.team.kick.success_notification": "You were kicked from %1$s's sphere team.",
+  "commands.stucktogether.team.kick.no_team": "You are not in a sphere team.",
+  "commands.stucktogether.team.kick.not_leader": "Only the leader can kick members from sphere team.",
+  "commands.stucktogether.team.kick.not_in_this_team": "%1$s is not in the sphere team.",
+  "commands.stucktogether.team.kick.leader_cant_kick_self": "Leader cannot kick self from sphere team.",
+
+  "commands.stucktogether.team.disband.success": "Your sphere team has been disbanded successfully.",
+  "commands.stucktogether.team.disband.no_team": "You are not in a sphere team.",
+  "commands.stucktogether.team.disband.not_leader": "Only the leader can disband the sphere team.",
+  "commands.stucktogether.team.disband.success_notification": "Your sphere team was disbanded.",
+
+  "commands.stucktogether.team.leave.success": "You left the sphere team successfully.",
+  "commands.stucktogether.team.leave.success_notification": "%1$s left the sphere team.",
+  "commands.stucktogether.team.leave.leader_cannot_leave": "You cannot leave the sphere team as leader. Try disbanding.",
+  "commands.stucktogether.team.leave.not_in_team": "You are not in a sphere team."
 }
