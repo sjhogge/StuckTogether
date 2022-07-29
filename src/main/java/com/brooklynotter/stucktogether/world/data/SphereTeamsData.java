@@ -69,6 +69,15 @@ public class SphereTeamsData extends SavedData {
         sync(server);
     }
 
+    public void removeTeam(MinecraftServer server, SphereTeam team, UUID playerUUID) {
+        if (getTeamOf(playerUUID) == null) return;
+
+        teams.remove(team);
+
+        setDirty();
+        sync(server);
+    }
+
     /* ------------------------- */
 
     @Override

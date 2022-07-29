@@ -54,9 +54,4 @@ public class StuckTogether {
         ServerConfigurations.initialize();
     }
 
-    @SubscribeEvent
-    public void onServerStarted(ServerStartedEvent event) {
-//        DeathSphereEvents.active = false;
-//        DeathSphereEvents.sphereRadius = 10;
-    }
 }
