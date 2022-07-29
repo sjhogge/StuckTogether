@@ -1,9 +1,9 @@
-## What is this?
+## What is Stuck Together?
 Hello fellow Minecrafters! Thanks for checking out my little mod :) 
-I wanted to learn how to create forge mods so I decided to recreate in forge and spruce up Dream's Forcefield mod from [this video](https://youtu.be/JAe0QwYre_M).
+I wanted to learn how to create forge mods so I decided to recreate in forge and add extra functionality to Dream's Forcefield mod from [this video](https://youtu.be/JAe0QwYre_M).
 This mod is currently available on 1.18.2. If you find any bugs, please reach out to me on discord at `BrooKlynOtter#1942`.
 
-For those that haven't seen the Dream video, this mod will make it so that if you go too far from other players on the server,
+This mod will make it so that if you go too far from other players on the server,
 everyone will die. Doesn't that sound fun! You can configure the size of the sphere, who all is encased in the death sphere with you, 
 and whether the mod is running through in-game Minecraft commands.
 
