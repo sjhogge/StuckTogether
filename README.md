@@ -1,3 +1,6 @@
+## Where to download:
+You can find a link to the most recent JAR file [here](https://www.curseforge.com/minecraft/mc-mods/stuck-together) :D
+
 ## What is Stuck Together?
 Hello fellow Minecrafters! Thanks for checking out my little mod :) 
 I wanted to learn how to create forge mods so I decided to recreate in forge and add extra functionality to Dream's Forcefield mod from [this video](https://youtu.be/JAe0QwYre_M).
